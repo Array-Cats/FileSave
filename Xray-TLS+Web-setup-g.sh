@@ -19,8 +19,8 @@ unset timezone
 unset ssh_service
 
 #安装配置信息
-nginx_version="nginx-1.24.0"
-openssl_version="openssl-openssl-3.1.0"
+nginx_version="nginx-1.25.2"
+openssl_version="openssl-openssl-3.1.3"
 nginx_prefix="/usr/local/nginx"
 nginx_config="${nginx_prefix}/conf.d/xray.conf"
 nginx_service="/etc/systemd/system/nginx.service"
@@ -31,7 +31,7 @@ php_prefix="/usr/local/php"
 php_service="/etc/systemd/system/php-fpm.service"
 unset php_is_installed
 
-cloudreve_version="3.7.1"
+cloudreve_version="3.8.2"
 cloudreve_prefix="/usr/local/cloudreve"
 cloudreve_service="/etc/systemd/system/cloudreve.service"
 unset cloudreve_is_installed
@@ -142,12 +142,12 @@ version_ge()
 #检查脚本更新
 check_script_update()
 {
-    [ "$(md5sum "${BASH_SOURCE[0]}" | awk '{print $1}')" == "$(md5sum <(wget -O - "https://github.com/kirin10000/Xray-script/raw/main/Xray-TLS+Web-setup.sh") | awk '{print $1}')" ] && return 1 || return 0
+    [ "$(md5sum "${BASH_SOURCE[0]}" | awk '{print $1}')" == "$(md5sum <(wget -O - "https://github.com/Array-Cats/FileSave/raw/main/Xray-TLS+Web-setup-g.sh") | awk '{print $1}')" ] && return 1 || return 0
 }
 #更新脚本
-#update_script()
+update_script()
 {
-    if wget -O "${BASH_SOURCE[0]}" "https://github.com/kirin10000/Xray-script/raw/main/Xray-TLS+Web-setup.sh" || wget -O "${BASH_SOURCE[0]}" "https://github.com/kirin10000/Xray-script/raw/main/Xray-TLS+Web-setup.sh"; then
+    if wget -O "${BASH_SOURCE[0]}" "https://github.com/Array-Cats/FileSave/raw/main/Xray-TLS+Web-setup-g.sh" || wget -O "${BASH_SOURCE[0]}" "https://github.com/Array-Cats/FileSave/raw/main/Xray-TLS+Web-setup-g.sh"; then
         green "脚本更新完成，请重新运行脚本！"
         exit 0
     else
@@ -155,7 +155,7 @@ check_script_update()
         exit 1
     fi
 }
-#ask_update_script()
+ask_update_script()
 {
     if check_script_update; then
         green "脚本可升级"
@@ -164,7 +164,7 @@ check_script_update()
         green "脚本已经是最新版本"
     fi
 }
-#ask_update_script_force()
+ask_update_script_force()
 {
     if check_script_update; then
         green "脚本可升级"
@@ -1600,9 +1600,9 @@ install_bbr()
                     fi
                     local temp_kernel_sh_url
                     if [ $choice -eq 1 ]; then
-                        temp_kernel_sh_url="https://github.com/kirin10000/update-kernel/raw/master/update-kernel-stable.sh"
+                        temp_kernel_sh_url="https://github.com/Array-Cats/update-kernel/raw/master/update-kernel-stable.sh"
                     elif [ $choice -eq 4 ]; then
-                        temp_kernel_sh_url="https://github.com/kirin10000/update-kernel/raw/master/update-kernel.sh"
+                        temp_kernel_sh_url="https://github.com/Array-Cats/update-kernel/raw/master/update-kernel.sh"
                     else
                         temp_kernel_sh_url="https://github.com/kirin10000/xanmod-install/raw/main/xanmod-install.sh"
                     fi
@@ -3396,7 +3396,7 @@ install_check_update_update_php()
     install_epel
     local php_status=0
     if [ $php_is_installed -eq 1 ]; then
-        ask_update_script_force
+        #ask_update_script_force
         if check_php_update; then
             green "php有新版本"
             ! ask_if "是否更新？(y/n)" && return 0
@@ -3434,7 +3434,7 @@ check_update_update_nginx()
     check_important_dependence_installed wget wget
     check_important_dependence_installed "procps" "procps-ng"
     install_epel
-    ask_update_script_force
+    #ask_update_script_force
     if check_nginx_update; then
         green "Nginx有新版本"
         ! ask_if "是否更新？(y/n)" && return 0
@@ -4122,7 +4122,7 @@ start_menu()
         [ "$dnf" == "yum" ] && check_important_dependence_installed "" "yum-utils"
         check_important_dependence_installed ca-certificates ca-certificates
         check_important_dependence_installed wget wget
-        ask_update_script_force
+        #ask_update_script_force
         bash "${BASH_SOURCE[0]}" --update
     elif [ $choice -eq 3 ]; then
         [ "$dnf" == "yum" ] && check_important_dependence_installed "" "yum-utils"
@@ -4159,7 +4159,7 @@ start_menu()
         [ "$dnf" == "yum" ] && check_important_dependence_installed "" "yum-utils"
         check_SELinux
         install_web_dependence "1"
-        ask_update_script_force
+        #ask_update_script_force
         enter_temp_dir
         update_cloudreve
         cd /
